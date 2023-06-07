@@ -20,7 +20,22 @@ def index(request, _):
     return render(request, 'index.html')
 
 
-def test(request, _):
+def decode(request, _):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    res = requests.post("http://api.weixin.qq.com/_/cos/metaid/decode", json={"metaid": body["metaid"]})
+    return JsonResponse({'code': 0, 'data': res.json()},
+                        json_dumps_params={'ensure_ascii': False})
+
+def encode(request, _):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    res = requests.post("http://api.weixin.qq.com/_/cos/metaid/encode", json=body)
+    return JsonResponse({'code': 0, 'data': res.json()},
+                        json_dumps_params={'ensure_ascii': False})
+
+
+def get_cos_ak(request, _):
     res = requests.get("http://api.weixin.qq.com/_/cos/getauth")
     return JsonResponse({'code': 0, 'data': res.json()},
                         json_dumps_params={'ensure_ascii': False})
