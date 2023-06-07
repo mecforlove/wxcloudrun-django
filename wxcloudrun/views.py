@@ -1,5 +1,6 @@
 import json
 import logging
+import requests
 
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -18,6 +19,11 @@ def index(request, _):
 
     return render(request, 'index.html')
 
+
+def test(request, _):
+    res = requests.get("http://api.weixin.qq.com/_/cos/getauth")
+    return JsonResponse({'code': 0, 'data': res.json()},
+                        json_dumps_params={'ensure_ascii': False})
 
 def counter(request, _):
     """
